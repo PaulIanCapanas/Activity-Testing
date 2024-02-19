@@ -29,7 +29,6 @@
 
                 pogsListElement.innerHTML = '';
 
-                // Render Pogs
                 pogs.forEach(pog => {
                     const pogElement = document.createElement('div');
                     pogElement.innerHTML = `
@@ -76,7 +75,6 @@
                     }
                 });
 
-                // Add event listeners to delete buttons
                 pogsListElement.addEventListener('click', function (event) {
                     const target = event.target;
                     if (target && target.classList.contains('deleteBtn')) {
@@ -93,7 +91,6 @@
                         if (!response.ok) {
                             throw new Error('Failed to delete Pog');
                         }
-                        // If deletion is successful, re-fetch and re-render the Pogs list
                         getPogs();
                     } catch (error) {
                         console.error('Error deleting Pog:', error);
@@ -118,7 +115,6 @@
                 if (!response.ok) {
                     throw new Error('Failed to update Pog');
                 }
-                // If update is successful, re-fetch and re-render the Pogs list
                 getPogs();
             } catch (error) {
                 console.error('Error updating Pog:', error);
