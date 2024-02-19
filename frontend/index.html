@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pogs Form</title>
+</head>
+
+<body>
+    <h1>Create Pogs Form</h1>
+    <form id="pogsForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="ticker_symbol">Ticker Symbol:</label>
+        <input type="text" id="ticker_symbol" name="ticker_symbol"><br><br>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price"><br><br>
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="color"><br><br>
+        <button type="submit">Submit</button>
+        <button type="submit" id="viewPogs">View Current Pogs</button>
+
+    </form>
+
+    <script>
+
+
+        document.getElementById('viewPogs').addEventListener('click', function () {
+            window.location.href = 'readPogs.html';
+        });
+        document.getElementById('pogsForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const formObject = {};
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+
+            const response = await fetch('/Pogs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formObject)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data); // Assuming you want to log the response data
+                // Optionally, you can redirect or display a success message here
+            } else {
+                console.error('Error submitting form:', response.statusText);
+                // Optionally, you can display an error message here
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Pogs</title>
+</head>
+
+<body>
+    <button type="submit" id="backToHome">Back</button>
+    <h1>List of Pogs</h1>
+    <div id="pogsList"></div>
+
+    <script>
+        document.getElementById('backToHome').addEventListener('click', function () {
+            window.location.href = 'index.html';
+        });
+
+        async function getPogs() {
+            try {
+                const response = await fetch('/pogs');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch Pogs');
+                }
+                const pogs = await response.json();
+                const pogsListElement = document.getElementById('pogsList');
+
+
+                pogsListElement.innerHTML = '';
+
+                // Render Pogs
+                pogs.forEach(pog => {
+                    const pogElement = document.createElement('div');
+                    pogElement.innerHTML = `
+                        <p><strong>Name:</strong> <span class="name">${pog.name}</span></p>
+                        <p><strong>Ticker Symbol:</strong> <span class="ticker">${pog.ticker_symbol}</span></p>
+                        <p><strong>Price:</strong> <span class="price">${pog.price}</span></p>
+                        <p><strong>Color:</strong> <span class="color">${pog.color}</span></p>
+                        <button class="updateBtn" data-pogid="${pog.id}">Update</button>
+                        <button class="deleteBtn" data-pogid="${pog.id}">Delete</button>
+                        
+                        <hr>
+                    `;
+                    pogsListElement.appendChild(pogElement);
+                });
+
+                pogsListElement.addEventListener('click', function (event) {
+                    const target = event.target;
+                    if (target && target.classList.contains('updateBtn')) {
+                        const pogId = target.getAttribute('data-pogid');
+                        const pogElement = target.parentElement;
+
+
+                        pogElement.querySelector('.name').innerHTML = `<input type="text" class="editName" value="${pogs.find(pog => pog.id === parseInt(pogId)).name}">`;
+                        pogElement.querySelector('.ticker').innerHTML = `<input type="text" class="editTicker" value="${pogs.find(pog => pog.id === parseInt(pogId)).ticker_symbol}">`;
+                        pogElement.querySelector('.price').innerHTML = `<input type="number" class="editPrice" value="${pogs.find(pog => pog.id === parseInt(pogId)).price}">`;
+                        pogElement.querySelector('.color').innerHTML = `<input type="text" class="editColor" value="${pogs.find(pog => pog.id === parseInt(pogId)).color}">`;
+
+
+                        target.innerHTML = "Save";
+                        target.classList.remove('updateBtn');
+                        target.classList.add('saveBtn');
+
+                        target.addEventListener('click', function () {
+                            const updatedPog = {
+                                id: parseInt(pogId),
+                                name: pogElement.querySelector('.editName').value,
+                                ticker_symbol: pogElement.querySelector('.editTicker').value,
+                                price: parseFloat(pogElement.querySelector('.editPrice').value),
+                                color: pogElement.querySelector('.editColor').value
+                            };
+
+                            updatePog(updatedPog);
+                        });
+                    }
+                });
+
+                // Add event listeners to delete buttons
+                pogsListElement.addEventListener('click', function (event) {
+                    const target = event.target;
+                    if (target && target.classList.contains('deleteBtn')) {
+                        const pogId = target.getAttribute('data-pogid');
+                        deletePog(pogId);
+                    }
+                });
+
+                async function deletePog(pogId) {
+                    try {
+                        const response = await fetch(`/pogs/${pogId}`, {
+                            method: 'DELETE'
+                        });
+                        if (!response.ok) {
+                            throw new Error('Failed to delete Pog');
+                        }
+                        // If deletion is successful, re-fetch and re-render the Pogs list
+                        getPogs();
+                    } catch (error) {
+                        console.error('Error deleting Pog:', error);
+                    }
+                }
+
+
+            } catch (error) {
+                console.error('Error fetching Pogs:', error);
+            }
+        }
+
+        async function updatePog(updatedPog) {
+            try {
+                const response = await fetch(`/pogs/${updatedPog.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedPog)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to update Pog');
+                }
+                // If update is successful, re-fetch and re-render the Pogs list
+                getPogs();
+            } catch (error) {
+                console.error('Error updating Pog:', error);
+            }
+        }
+
+        window.onload = getPogs;
+    </script>
