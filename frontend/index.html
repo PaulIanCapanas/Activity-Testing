@@ -48,11 +48,9 @@
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data); // Assuming you want to log the response data
-                // Optionally, you can redirect or display a success message here
+                console.log(data)
             } else {
                 console.error('Error submitting form:', response.statusText);
-                // Optionally, you can display an error message here
             }
         });
     </script>
