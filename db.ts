@@ -3,8 +3,8 @@ import { Pool } from 'pg'
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  password: 'bambam073004',
-  database: 'postgres',
+  password: 'postgres',
+  database: 'test',
   port: 5432
 })
 
