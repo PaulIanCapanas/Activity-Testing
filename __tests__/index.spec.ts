@@ -2,7 +2,7 @@ import { app } from "../app";
 import supertest from "supertest";
 
 
-//GET 
+//this should test the get request of the code
 describe("get request", () => {
 
   it("should get all pogs", async () => {
@@ -12,9 +12,9 @@ describe("get request", () => {
   });
 });
 
-//GET by ID
+//this should test the get request by ID of the code
 describe("get request by id", () => {
-  let pogId = 16;
+  let pogId = 1;
   it("should get a pog by id", async () => {
     const response = await supertest(app).get(`/pogs/${pogId}`);
     expect(response.statusCode).toBe(200);
@@ -22,7 +22,7 @@ describe("get request by id", () => {
   });
 });
 
-//POST
+//this should test the post request of the code
 describe("post request", () => {
   it("should add a pog", async () => {
     const response = await supertest(app)
@@ -38,7 +38,7 @@ describe("post request", () => {
   });
 });
 
-//PUT
+//this should test the put request or the update of the code
 describe("put request", () => {
   let pogId = 16;
   it("should update a pog", async () => {
@@ -55,7 +55,7 @@ describe("put request", () => {
   });
 });
 
-//DELETE
+//this should test the delete request of the code
 describe("delete request", () => {
   let pogId = 16;
   it("should delete a pog", async () => {
