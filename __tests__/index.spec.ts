@@ -30,7 +30,7 @@ describe("post request", () => {
       .send({
         "name": "Aljason",
         "ticker_symbol": "Alj",
-        "price": 69,
+        "price": 300,
         "color": "White",
       });
     expect(response.statusCode).toBe(201);

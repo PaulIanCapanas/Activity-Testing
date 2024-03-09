@@ -77,7 +77,7 @@ async function startServer() {
     })
     .use(express.static("frontend"))
     .listen(3000, () => {
-      console.log("carlo mbappe http://localhost:3000");
+      console.log("server started at http://localhost:3000");
     });
 }
 startServer();
